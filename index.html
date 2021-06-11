@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdn.bootcss.com/leaflet/1.2.0/leaflet.css" />
+  <script src="https://cdn.bootcss.com/leaflet/1.2.0/leaflet.js"></script>
+  <script src="./Semicircle.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    #mapid {
+      height: 100vh;
+    }
+
+    .list {
+      z-index: 999;
+      width: 100px;
+      height: 100px;
+      background-color: #fff;
+      position: absolute;
+      top: 200px;
+      left: 0;
+    }
+
+    .list button {
+      width: 100%;
+      height: 100%;
+      color: red;
+    }
+
+    .my-div-icon {
+      text-align: center;
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="mapid"></div>
+  <div class="list">
+    <button id="dianji">点我显示/隐藏</button>
+  </div>
+  <script>
+    //地图两种方式
+    // var map = L.map('mapid').setView([27.550894, 121.529732], 4);
+    var map = L.map('mapid', {
+      center: [27.550894, 121.529732],
+      zoom: 4
+    });
+    //瓦片
+    L.tileLayer("http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}")
+      .addTo(map);
+    //两个坐标数据
+    var latlngs = [
+      [
+        34,
+        127
+      ],
+      [
+        22,
+        127
+      ],
+      [
+        18,
+        119
+      ],
+      [
+        11,
+        119
+      ],
+      [
+        4.5,
+        113
+      ],
+      [
+        0,
+        105
+      ]
+    ];
+    var latlngs2 = [
+      [
+        34,
+        132
+      ],
+      [
+        22,
+        132
+      ],
+      [
+        0,
+        119
+      ],
+      [
+        0,
+        105
+      ]
+    ];
+    //actualTrack是台风数据
+    //forecastTrack是台风预测数据
+    var actualTrack = {
+      "success": true,
+      "code": 200,
+      "message": "请求成功",
+      "data": [
+        {
+          "id": "3",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "10",
+          "filesuffix": "0",
+          "lon": 115.2,
+          "lat": 21.1,
+          "maxwind": 30.0,
+          "centerpress": 980.0,
+          "zfwind": 9999.0,
+          "level7radius1": 200.0,
+          "level7radius1direc": "NORTHEAST",
+          "level7radius2": 200.0,
+          "level7radius2direc": "SOUTHEAST",
+          "level7radius3": 150.0,
+          "level7radius3direc": "SOUTHWEST",
+          "level7radius4": 200.0,
+          "level7radius4direc": "NORTHWEST",
+          "level10radius1": 30.0,
+          "level10radius1direc": "NORTHEAST",
+          "level10radius2": 30.0,
+          "level10radius2direc": "SOUTHEAST",
+          "level10radius3": 30.0,
+          "level10radius3direc": "SOUTHWEST",
+          "level10radius4": 30.0,
+          "level10radius4direc": "NORTHWEST",
+          "ybradius": 9999.0,
+          "removedirec": "WNW",
+          "removespeed": 0.0,
+          "typlevel": 2
+        },
+        {
+          "id": "5",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "11",
+          "filesuffix": "0",
+          "lon": 115.1,
+          "lat": 21.1,
+          "maxwind": 30.0,
+          "centerpress": 980.0,
+          "zfwind": 9999.0,
+          "level7radius1": 200.0,
+          "level7radius1direc": "NORTHEAST",
+          "level7radius2": 200.0,
+          "level7radius2direc": "SOUTHEAST",
+          "level7radius3": 150.0,
+          "level7radius3direc": "SOUTHWEST",
+          "level7radius4": 200.0,
+          "level7radius4direc": "NORTHWEST",
+          "level10radius1": 30.0,
+          "level10radius1direc": "NORTHEAST",
+          "level10radius2": 30.0,
+          "level10radius2direc": "SOUTHEAST",
+          "level10radius3": 30.0,
+          "level10radius3direc": "SOUTHWEST",
+          "level10radius4": 30.0,
+          "level10radius4direc": "NORTHWEST",
+          "ybradius": 9999.0,
+          "removedirec": "WNW",
+          "removespeed": 0.0,
+          "typlevel": 2
+        },
+        {
+          "id": "7",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "16",
+          "filesuffix": "0",
+          "lon": 114.1,
+          "lat": 21.4,
+          "maxwind": 35.0,
+          "centerpress": 970.0,
+          "zfwind": 9999.0,
+          "level7radius1": 200.0,
+          "level7radius1direc": "NORTHEAST",
+          "level7radius2": 200.0,
+          "level7radius2direc": "SOUTHEAST",
+          "level7radius3": 150.0,
+          "level7radius3direc": "SOUTHWEST",
+          "level7radius4": 200.0,
+          "level7radius4direc": "NORTHWEST",
+          "level10radius1": 40.0,
+          "level10radius1direc": "NORTHEAST",
+          "level10radius2": 40.0,
+          "level10radius2direc": "SOUTHEAST",
+          "level10radius3": 40.0,
+          "level10radius3direc": "SOUTHWEST",
+          "level10radius4": 40.0,
+          "level10radius4direc": "NORTHWEST",
+          "ybradius": 9999.0,
+          "removedirec": "WNW",
+          "removespeed": 0.0,
+          "typlevel": 3
+        },
+        {
+          "id": "9",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "17",
+          "filesuffix": "0",
+          "lon": 114.0,
+          "lat": 21.4,
+          "maxwind": 35.0,
+          "centerpress": 970.0,
+          "zfwind": 9999.0,
+          "level7radius1": 200.0,
+          "level7radius1direc": "NORTHEAST",
+          "level7radius2": 200.0,
+          "level7radius2direc": "SOUTHEAST",
+          "level7radius3": 150.0,
+          "level7radius3direc": "SOUTHWEST",
+          "level7radius4": 200.0,
+          "level7radius4direc": "NORTHWEST",
+          "level10radius1": 40.0,
+          "level10radius1direc": "NORTHEAST",
+          "level10radius2": 40.0,
+          "level10radius2direc": "SOUTHEAST",
+          "level10radius3": 40.0,
+          "level10radius3direc": "SOUTHWEST",
+          "level10radius4": 40.0,
+          "level10radius4direc": "NORTHWEST",
+          "ybradius": 9999.0,
+          "removedirec": "WNW",
+          "removespeed": 0.0,
+          "typlevel": 3
+        },
+        {
+          "id": "13",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "18",
+          "filesuffix": "0",
+          "lon": 113.8,
+          "lat": 21.5,
+          "maxwind": 35.0,
+          "centerpress": 970.0,
+          "zfwind": 9999.0,
+          "level7radius1": 200.0,
+          "level7radius1direc": "NORTHEAST",
+          "level7radius2": 200.0,
+          "level7radius2direc": "SOUTHEAST",
+          "level7radius3": 150.0,
+          "level7radius3direc": "SOUTHWEST",
+          "level7radius4": 200.0,
+          "level7radius4direc": "NORTHWEST",
+          "level10radius1": 40.0,
+          "level10radius1direc": "NORTHEAST",
+          "level10radius2": 40.0,
+          "level10radius2direc": "SOUTHEAST",
+          "level10radius3": 40.0,
+          "level10radius3direc": "SOUTHWEST",
+          "level10radius4": 40.0,
+          "level10radius4direc": "NORTHWEST",
+          "ybradius": 9999.0,
+          "removedirec": "WNW",
+          "removespeed": 19.0,
+          "typlevel": 3
+        },
+        {
+          "id": "11",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "18",
+          "filesuffix": "0",
+          "lon": 113.8,
+          "lat": 21.5,
+          "maxwind": 35.0,
+          "centerpress": 970.0,
+          "zfwind": 9999.0,
+          "level7radius1": 200.0,
+          "level7radius1direc": "NORTHEAST",
+          "level7radius2": 200.0,
+          "level7radius2direc": "SOUTHEAST",
+          "level7radius3": 150.0,
+          "level7radius3direc": "SOUTHWEST",
+          "level7radius4": 200.0,
+          "level7radius4direc": "NORTHWEST",
+          "level10radius1": 40.0,
+          "level10radius1direc": "NORTHEAST",
+          "level10radius2": 40.0,
+          "level10radius2direc": "SOUTHEAST",
+          "level10radius3": 40.0,
+          "level10radius3direc": "SOUTHWEST",
+          "level10radius4": 40.0,
+          "level10radius4direc": "NORTHWEST",
+          "ybradius": 9999.0,
+          "removedirec": "WNW",
+          "removespeed": 0.0,
+          "typlevel": 3
+        },
+        {
+          "id": "19",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "19",
+          "filesuffix": "0",
+          "lon": 113.7,
+          "lat": 21.6,
+          "maxwind": 35.0,
+          "centerpress": 970.0,
+          "zfwind": 9999.0,
+          "level7radius1": 200.0,
+          "level7radius1direc": "NORTHEAST",
+          "level7radius2": 200.0,
+          "level7radius2direc": "SOUTHEAST",
+          "level7radius3": 150.0,
+          "level7radius3direc": "SOUTHWEST",
+          "level7radius4": 200.0,
+          "level7radius4direc": "NORTHWEST",
+          "level10radius1": 40.0,
+          "level10radius1direc": "NORTHEAST",
+          "level10radius2": 40.0,
+          "level10radius2direc": "SOUTHEAST",
+          "level10radius3": 40.0,
+          "level10radius3direc": "SOUTHWEST",
+          "level10radius4": 40.0,
+          "level10radius4direc": "NORTHWEST",
+          "ybradius": 9999.0,
+          "removedirec": "WNW",
+          "removespeed": 0.0,
+          "typlevel": 3
+        },
+        {
+          "id": "21",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "20",
+          "filesuffix": "0",
+          "lon": 113.6,
+          "lat": 21.7,
+          "maxwind": 35.0,
+          "centerpress": 970.0,
+          "zfwind": 9999.0,
+          "level7radius1": 200.0,
+          "level7radius1direc": "NORTHEAST",
+          "level7radius2": 200.0,
+          "level7radius2direc": "SOUTHEAST",
+          "level7radius3": 150.0,
+          "level7radius3direc": "SOUTHWEST",
+          "level7radius4": 200.0,
+          "level7radius4direc": "NORTHWEST",
+          "level10radius1": 40.0,
+          "level10radius1direc": "NORTHEAST",
+          "level10radius2": 40.0,
+          "level10radius2direc": "SOUTHEAST",
+          "level10radius3": 40.0,
+          "level10radius3direc": "SOUTHWEST",
+          "level10radius4": 40.0,
+          "level10radius4direc": "NORTHWEST",
+          "ybradius": 9999.0,
+          "removedirec": "WNW",
+          "removespeed": 0.0,
+          "typlevel": 3
+        },
+        {
+          "id": "23",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "21",
+          "filesuffix": "0",
+          "lon": 113.6,
+          "lat": 21.8,
+          "maxwind": 35.0,
+          "centerpress": 970.0,
+          "zfwind": 9999.0,
+          "level7radius1": 180.0,
+          "level7radius1direc": "NORTHEAST",
+          "level7radius2": 200.0,
+          "level7radius2direc": "SOUTHEAST",
+          "level7radius3": 150.0,
+          "level7radius3direc": "SOUTHWEST",
+          "level7radius4": 150.0,
+          "level7radius4direc": "NORTHWEST",
+          "level10radius1": 40.0,
+          "level10radius1direc": "NORTHEAST",
+          "level10radius2": 40.0,
+          "level10radius2direc": "SOUTHEAST",
+          "level10radius3": 40.0,
+          "level10radius3direc": "SOUTHWEST",
+          "level10radius4": 40.0,
+          "level10radius4direc": "NORTHWEST",
+          "ybradius": 9999.0,
+          "removedirec": "NW",
+          "removespeed": 0.0,
+          "typlevel": 3
+        },
+        {
+          "id": "25",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "21",
+          "filesuffix": "0",
+          "lon": 113.6,
+          "lat": 21.8,
+          "maxwind": 35.0,
+          "centerpress": 970.0,
+          "zfwind": 9999.0,
+          "level7radius1": 180.0,
+          "level7radius1direc": "NORTHEAST",
+          "level7radius2": 200.0,
+          "level7radius2direc": "SOUTHEAST",
+          "level7radius3": 150.0,
+          "level7radius3direc": "SOUTHWEST",
+          "level7radius4": 150.0,
+          "level7radius4direc": "NORTHWEST",
+          "level10radius1": 40.0,
+          "level10radius1direc": "NORTHEAST",
+          "level10radius2": 40.0,
+          "level10radius2direc": "SOUTHEAST",
+          "level10radius3": 40.0,
+          "level10radius3direc": "SOUTHWEST",
+          "level10radius4": 40.0,
+          "level10radius4direc": "NORTHWEST",
+          "ybradius": 9999.0,
+          "removedirec": "NW",
+          "removespeed": 22.0,
+          "typlevel": 3
+        },
+        {
+          "id": "31",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "22",
+          "filesuffix": "0",
+          "lon": 113.3,
+          "lat": 22.1,
+          "maxwind": 35.0,
+          "centerpress": 970.0,
+          "zfwind": 9999.0,
+          "level7radius1": 180.0,
+          "level7radius1direc": "NORTHEAST",
+          "level7radius2": 200.0,
+          "level7radius2direc": "SOUTHEAST",
+          "level7radius3": 150.0,
+          "level7radius3direc": "SOUTHWEST",
+          "level7radius4": 150.0,
+          "level7radius4direc": "NORTHWEST",
+          "level10radius1": 40.0,
+          "level10radius1direc": "NORTHEAST",
+          "level10radius2": 40.0,
+          "level10radius2direc": "SOUTHEAST",
+          "level10radius3": 40.0,
+          "level10radius3direc": "SOUTHWEST",
+          "level10radius4": 40.0,
+          "level10radius4direc": "NORTHWEST",
+          "ybradius": 9999.0,
+          "removedirec": "WNW",
+          "removespeed": 0.0,
+          "typlevel": 3
+        }
+      ]
+    }
+    var forecastTrack = {
+      "success": true,
+      "code": 200,
+      "message": "请求成功",
+      "data": [
+        {
+          "id": "14",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "18",
+          "filesuffix": "6",
+          "lon": 113.0,
+          "lat": 22.0,
+          "maxwind": 38.0,
+          "centerpress": 965.0,
+          "zfwind": 9999.0,
+          "level7radius1": 9999.0,
+          "level7radius1direc": "9999",
+          "level7radius2": 9999.0,
+          "level7radius2direc": "9999",
+          "level7radius3": 9999.0,
+          "level7radius3direc": "9999",
+          "level7radius4": 9999.0,
+          "level7radius4direc": "9999",
+          "level10radius1": 9999.0,
+          "level10radius1direc": "9999",
+          "level10radius2": 9999.0,
+          "level10radius2direc": "9999",
+          "level10radius3": 9999.0,
+          "level10radius3direc": "9999",
+          "level10radius4": 9999.0,
+          "level10radius4direc": "9999",
+          "ybradius": 9999.0,
+          "removedirec": "9999",
+          "removespeed": 9999.0,
+          "typlevel": 3
+        },
+        {
+          "id": "26",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "21",
+          "filesuffix": "6",
+          "lon": 112.9,
+          "lat": 22.5,
+          "maxwind": 33.0,
+          "centerpress": 975.0,
+          "zfwind": 9999.0,
+          "level7radius1": 9999.0,
+          "level7radius1direc": "9999",
+          "level7radius2": 9999.0,
+          "level7radius2direc": "9999",
+          "level7radius3": 9999.0,
+          "level7radius3direc": "9999",
+          "level7radius4": 9999.0,
+          "level7radius4direc": "9999",
+          "level10radius1": 9999.0,
+          "level10radius1direc": "9999",
+          "level10radius2": 9999.0,
+          "level10radius2direc": "9999",
+          "level10radius3": 9999.0,
+          "level10radius3direc": "9999",
+          "level10radius4": 9999.0,
+          "level10radius4direc": "9999",
+          "ybradius": 9999.0,
+          "removedirec": "9999",
+          "removespeed": 9999.0,
+          "typlevel": 3
+        },
+        {
+          "id": "15",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "18",
+          "filesuffix": "12",
+          "lon": 112.0,
+          "lat": 22.6,
+          "maxwind": 33.0,
+          "centerpress": 975.0,
+          "zfwind": 9999.0,
+          "level7radius1": 9999.0,
+          "level7radius1direc": "9999",
+          "level7radius2": 9999.0,
+          "level7radius2direc": "9999",
+          "level7radius3": 9999.0,
+          "level7radius3direc": "9999",
+          "level7radius4": 9999.0,
+          "level7radius4direc": "9999",
+          "level10radius1": 9999.0,
+          "level10radius1direc": "9999",
+          "level10radius2": 9999.0,
+          "level10radius2direc": "9999",
+          "level10radius3": 9999.0,
+          "level10radius3direc": "9999",
+          "level10radius4": 9999.0,
+          "level10radius4direc": "9999",
+          "ybradius": 9999.0,
+          "removedirec": "9999",
+          "removespeed": 9999.0,
+          "typlevel": 3
+        },
+        {
+          "id": "27",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "21",
+          "filesuffix": "12",
+          "lon": 111.5,
+          "lat": 23.1,
+          "maxwind": 25.0,
+          "centerpress": 985.0,
+          "zfwind": 9999.0,
+          "level7radius1": 9999.0,
+          "level7radius1direc": "9999",
+          "level7radius2": 9999.0,
+          "level7radius2direc": "9999",
+          "level7radius3": 9999.0,
+          "level7radius3direc": "9999",
+          "level7radius4": 9999.0,
+          "level7radius4direc": "9999",
+          "level10radius1": 9999.0,
+          "level10radius1direc": "9999",
+          "level10radius2": 9999.0,
+          "level10radius2direc": "9999",
+          "level10radius3": 9999.0,
+          "level10radius3direc": "9999",
+          "level10radius4": 9999.0,
+          "level10radius4direc": "9999",
+          "ybradius": 9999.0,
+          "removedirec": "9999",
+          "removespeed": 9999.0,
+          "typlevel": 3
+        },
+        {
+          "id": "16",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "18",
+          "filesuffix": "18",
+          "lon": 110.8,
+          "lat": 23.2,
+          "maxwind": 25.0,
+          "centerpress": 985.0,
+          "zfwind": 9999.0,
+          "level7radius1": 9999.0,
+          "level7radius1direc": "9999",
+          "level7radius2": 9999.0,
+          "level7radius2direc": "9999",
+          "level7radius3": 9999.0,
+          "level7radius3direc": "9999",
+          "level7radius4": 9999.0,
+          "level7radius4direc": "9999",
+          "level10radius1": 9999.0,
+          "level10radius1direc": "9999",
+          "level10radius2": 9999.0,
+          "level10radius2direc": "9999",
+          "level10radius3": 9999.0,
+          "level10radius3direc": "9999",
+          "level10radius4": 9999.0,
+          "level10radius4direc": "9999",
+          "ybradius": 9999.0,
+          "removedirec": "9999",
+          "removespeed": 9999.0,
+          "typlevel": 3
+        },
+        {
+          "id": "28",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "21",
+          "filesuffix": "18",
+          "lon": 110.3,
+          "lat": 23.9,
+          "maxwind": 18.0,
+          "centerpress": 995.0,
+          "zfwind": 9999.0,
+          "level7radius1": 9999.0,
+          "level7radius1direc": "9999",
+          "level7radius2": 9999.0,
+          "level7radius2direc": "9999",
+          "level7radius3": 9999.0,
+          "level7radius3direc": "9999",
+          "level7radius4": 9999.0,
+          "level7radius4direc": "9999",
+          "level10radius1": 9999.0,
+          "level10radius1direc": "9999",
+          "level10radius2": 9999.0,
+          "level10radius2direc": "9999",
+          "level10radius3": 9999.0,
+          "level10radius3direc": "9999",
+          "level10radius4": 9999.0,
+          "level10radius4direc": "9999",
+          "ybradius": 9999.0,
+          "removedirec": "9999",
+          "removespeed": 9999.0,
+          "typlevel": 3
+        },
+        {
+          "id": "29",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "21",
+          "filesuffix": "24",
+          "lon": 108.9,
+          "lat": 24.7,
+          "maxwind": 15.0,
+          "centerpress": 1000.0,
+          "zfwind": 9999.0,
+          "level7radius1": 9999.0,
+          "level7radius1direc": "9999",
+          "level7radius2": 9999.0,
+          "level7radius2direc": "9999",
+          "level7radius3": 9999.0,
+          "level7radius3direc": "9999",
+          "level7radius4": 9999.0,
+          "level7radius4direc": "9999",
+          "level10radius1": 9999.0,
+          "level10radius1direc": "9999",
+          "level10radius2": 9999.0,
+          "level10radius2direc": "9999",
+          "level10radius3": 9999.0,
+          "level10radius3direc": "9999",
+          "level10radius4": 9999.0,
+          "level10radius4direc": "9999",
+          "ybradius": 9999.0,
+          "removedirec": "9999",
+          "removespeed": 9999.0,
+          "typlevel": 3
+        },
+        {
+          "id": "17",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "18",
+          "filesuffix": "24",
+          "lon": 109.6,
+          "lat": 23.8,
+          "maxwind": 20.0,
+          "centerpress": 995.0,
+          "zfwind": 9999.0,
+          "level7radius1": 9999.0,
+          "level7radius1direc": "9999",
+          "level7radius2": 9999.0,
+          "level7radius2direc": "9999",
+          "level7radius3": 9999.0,
+          "level7radius3direc": "9999",
+          "level7radius4": 9999.0,
+          "level7radius4direc": "9999",
+          "level10radius1": 9999.0,
+          "level10radius1direc": "9999",
+          "level10radius2": 9999.0,
+          "level10radius2direc": "9999",
+          "level10radius3": 9999.0,
+          "level10radius3direc": "9999",
+          "level10radius4": 9999.0,
+          "level10radius4direc": "9999",
+          "ybradius": 9999.0,
+          "removedirec": "9999",
+          "removespeed": 9999.0,
+          "typlevel": 3
+        },
+        {
+          "id": "18",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "18",
+          "filesuffix": "36",
+          "lon": 107.5,
+          "lat": 24.9,
+          "maxwind": 15.0,
+          "centerpress": 1002.0,
+          "zfwind": 9999.0,
+          "level7radius1": 9999.0,
+          "level7radius1direc": "9999",
+          "level7radius2": 9999.0,
+          "level7radius2direc": "9999",
+          "level7radius3": 9999.0,
+          "level7radius3direc": "9999",
+          "level7radius4": 9999.0,
+          "level7radius4direc": "9999",
+          "level10radius1": 9999.0,
+          "level10radius1direc": "9999",
+          "level10radius2": 9999.0,
+          "level10radius2direc": "9999",
+          "level10radius3": 9999.0,
+          "level10radius3direc": "9999",
+          "level10radius4": 9999.0,
+          "level10radius4direc": "9999",
+          "ybradius": 9999.0,
+          "removedirec": "9999",
+          "removespeed": 9999.0,
+          "typlevel": 3
+        },
+        {
+          "id": "30",
+          "typnumber": "202007",
+          "ybcenter": "BJ",
+          "year": "2020",
+          "month": "8",
+          "day": "18",
+          "hour": "21",
+          "filesuffix": "36",
+          "lon": 106.5,
+          "lat": 25.2,
+          "maxwind": 12.0,
+          "centerpress": 1002.0,
+          "zfwind": 9999.0,
+          "level7radius1": 9999.0,
+          "level7radius1direc": "9999",
+          "level7radius2": 9999.0,
+          "level7radius2direc": "9999",
+          "level7radius3": 9999.0,
+          "level7radius3direc": "9999",
+          "level7radius4": 9999.0,
+          "level7radius4direc": "9999",
+          "level10radius1": 9999.0,
+          "level10radius1direc": "9999",
+          "level10radius2": 9999.0,
+          "level10radius2direc": "9999",
+          "level10radius3": 9999.0,
+          "level10radius3direc": "9999",
+          "level10radius4": 9999.0,
+          "level10radius4direc": "9999",
+          "ybradius": 9999.0,
+          "removedirec": "9999",
+          "removespeed": 9999.0,
+          "typlevel": 3
+        }
+      ]
+    }
+
+
+    //绘制两条警戒线 latlngs是坐标数组,放在博客
+    var polyline = L.polyline(latlngs, { color: 'yellow', weight: '1' }).addTo(map); //latlngs是坐标信息,放在博客
+    var polyline2 = L.polyline(latlngs2, { color: 'yellow', weight: '1', dashArray: '5' }).addTo(map);//dashArray是显示虚线
+
+    //警戒线 文字
+    var myIcon = L.divIcon({
+      className: 'my-div-icon',
+      html: "24</br>小</br>时</br>预</br>警</br>线",
+      iconSize: 30
+    });
+    var wenzi = L.marker(latlngs[0], {
+      icon: myIcon
+    }).addTo(map);
+    var myIcon2 = L.divIcon({
+      className: 'my-div-icon',
+      html: "48</br>小</br>时</br>预</br>警</br>线",
+      iconSize: 30
+    });
+    var wenzi2 = L.marker(latlngs2[0], {
+      icon: myIcon2
+    }).addTo(map);
+
+    //台风图层
+    window.tuceng2 = 0;
+    tuceng2 = L.layerGroup();
+
+    //绘制台风路径点
+    actualTrack.data.forEach((item) => {
+      if (item.typlevel == 2) {
+        var dian2 = L.circleMarker([item.lat, item.lon], { color: "#0000c0", fillColor: '#0000c0', radius: 3, fillOpacity: 1 });
+        tuceng2.addLayer(dian2)
+      } else {
+        var dian2 = L.circleMarker([item.lat, item.lon], { color: 'red', fillColor: 'red', radius: 3, fillOpacity: 1 });
+        tuceng2.addLayer(dian2)
+      }
+      dian2.on('mouseover', onmsm);
+      function onmsm(e) {
+        onmsover(e, item)
+      }
+      dian2.on('click', onck);
+      function onck(e) {
+        ock(e, item)
+      }
+    })
+
+
+    //绘制台风路径线
+    let newArr2 = actualTrack.data.filter(function (value, index, array) {
+      return value.typlevel == 2;
+    });
+    newArr2 = newArr2.map(function (value, index) {
+      return [value.lat, value.lon]
+    })
+
+    let newArr3 = actualTrack.data.filter(function (value, index, array) {
+      return value.typlevel == 3;
+    });
+    newArr3 = newArr3.map(function (value, index) {
+      return [value.lat, value.lon]
+    })
+
+    //路径和预测路径连接
+    newArr2 = [...newArr2, newArr3[0]]
+    var xianlu1 = L.polyline(newArr2, { color: '#0000c0', weight: '2', })
+    var xianlu2 = L.polyline(newArr3, { color: 'pink', weight: '2', })
+    tuceng2.addLayer(xianlu1)
+    tuceng2.addLayer(xianlu2)
+
+    //台风点移入触发的提示信息
+    function onmsover(e, item) {
+      //popText是自己定义的html信息 使用`${}`的方式插入想要的数据
+      var popText = `<div><h3 style="text-align: center;">台风等级:${item.typlevel}</h3></div>`
+      //e.target是触发的点信息,没啥好说的,和入门的教程一样
+      e.target.bindTooltip(popText, { direction: 'right', className: 'tips' }).openTooltip();
+    }
+
+
+    //全局控制器
+    window.flgpt = 0
+    //图层tuceng3 台风预测路径
+    window.tuceng3 = 0
+    //图层tuceng4 台风半径
+    window.tuceng4 = 0
+
+    //台风点击事件
+    function ock(e, item) {
+      //定义点图标
+      var greenIcon = L.icon({
+        iconUrl: './img/icon.gif', //图标路径
+        iconSize: [26, 26], // 图标大小
+        iconAnchor: [13, 13], // 偏移
+      });
+
+      //控制排他
+      if (flgpt != 0) {
+        map.removeLayer(tuceng3);
+        map.removeLayer(tuceng4);
+        map.removeLayer(tupian);
+      }
+      //新建两个图层
+      tuceng3 = L.layerGroup()
+      tuceng4 = L.layerGroup()
+
+      //遍历出二维数据用来画线预测线路坐标  forecastTrack是动态预测数据
+      var newSj = forecastTrack.data.map(function (value, index) {
+        return [value.lat, value.lon]
+      })//newSj就拿到了过滤后的二维数组坐标
+
+      //把当前点坐标当做画线的第一个点,这样就可以连接预测线路了
+      yucexianlu = L.polyline([[e.target._latlng.lat, e.target._latlng.lng], ...newSj], { color: 'yellow', weight: '1', dashArray: '5' });
+      tuceng3.addLayer(yucexianlu);  //添加到图层
+
+      //循环预测点
+      forecastTrack.data.forEach((item) => {
+        //可以直接使用响应的数据循环 forecastTrack.data 
+        var dian3 = L.circleMarker([item.lat, item.lon], { color: '#FF0000', fillColor: '#FF0000', radius: 3, fillOpacity: 1 });
+        tuceng3.addLayer(dian3)
+        dian3.on('mouseover', onmsm);
+        function onmsm(e) {
+          onmsover(e, item)
+        }
+      })
+      tuceng3.addTo(map)
+
+      //点击添加图片
+      tupian = L.marker(e.target._latlng, { icon: greenIcon, interactive: false }).addTo(map);
+
+      //绘制台风圈
+      //7级
+      tuceng4.addLayer(L.semiCircle(e.target._latlng, {
+        radius: item.level7radius1,
+        startAngle: 0,
+        stopAngle: 90,
+        fill: true,
+        fillColor: '#f03',
+        fillOpacity: 0.5,
+        color: 'transparent',
+        opacity: 0.5,
+        interactive: false,
+      }))
+      tuceng4.addLayer(L.semiCircle(e.target._latlng, {
+        radius: item.level7radius2,
+        startAngle: 90,
+        stopAngle: 180,
+        fill: true,
+        fillColor: '#f03',
+        fillOpacity: 0.5,
+        color: 'transparent',
+        opacity: 0.5,
+        interactive: false,
+      }))
+      tuceng4.addLayer(L.semiCircle(e.target._latlng, {
+        radius: item.level7radius3,
+        startAngle: 180,
+        stopAngle: 270,
+        fill: true,
+        fillColor: '#f03',
+        fillOpacity: 0.5,
+        color: 'transparent',
+        opacity: 0.5,
+        interactive: false,
+      }))
+      tuceng4.addLayer(L.semiCircle(e.target._latlng, {
+        radius: item.level7radius4,
+        startAngle: 270,
+        stopAngle: 360,
+        fill: true,
+        fillColor: '#f03',
+        fillOpacity: 0.5,
+        color: 'transparent',
+        opacity: 0.5,
+        interactive: false,
+      }))
+      //10级
+      tuceng4.addLayer(L.semiCircle(e.target._latlng, {
+        radius: item.level10radius1,
+        startAngle: 0,
+        stopAngle: 90,
+        fill: true,
+        fillColor: '#f03',
+        fillOpacity: 0.5,
+        color: 'transparent',
+        opacity: 0.5,
+        interactive: false,
+      }))
+      tuceng4.addLayer(L.semiCircle(e.target._latlng, {
+        radius: item.level10radius2,
+        startAngle: 90,
+        stopAngle: 180,
+        fill: true,
+        fillColor: '#f03',
+        fillOpacity: 0.5,
+        color: 'transparent',
+        opacity: 0.5,
+        interactive: false,
+      }))
+      tuceng4.addLayer(L.semiCircle(e.target._latlng, {
+        radius: item.level10radius3,
+        startAngle: 180,
+        stopAngle: 270,
+        fill: true,
+        fillColor: '#f03',
+        fillOpacity: 0.5,
+        color: 'transparent',
+        opacity: 0.5,
+        interactive: false,
+
+      }))
+      tuceng4.addLayer(L.semiCircle(e.target._latlng, {
+        radius: item.level10radius4,
+        startAngle: 270,
+        stopAngle: 360,
+        fill: true,
+        fillColor: '#f03',
+        fillOpacity: 0.5,
+        color: 'transparent',
+        opacity: 0.5,
+        interactive: false,
+      }))
+      tuceng4.addTo(map)
+
+      //控制器改变
+      flgpt = 1
+    }
+
+    //列表显示与隐藏控制器
+    document.getElementById('dianji').addEventListener("click", shijian);
+    var flg = true
+    function shijian() {
+      if (flg) {
+        tuceng2.addTo(map);
+        flg = !flg
+      } else {
+        if (flgpt != 0) {
+          map.removeLayer(tuceng3);
+          map.removeLayer(tuceng4);
+          map.removeLayer(tupian);
+        }
+        flg = !flg
+        tuceng2.remove(map)
+      }
+    }
+  </script>
+</body>
+
+</html>
